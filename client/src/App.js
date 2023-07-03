@@ -8,8 +8,8 @@ function App() {
       <ParticlesBg  type="cobweb" bg={true} />
       <Navigation />
       <Logo />
+      <ImageLinkForm />
       {/* 
-    <ImageLinkForm />
     <FaceRecognition /> */}
     </div>
   );
