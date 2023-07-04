@@ -5,7 +5,7 @@ import { Navigation, Logo, ImageLinkForm, Rank, FaceRecognition } from './compon
 function App() {
   return (
     <div className='App'>
-      <ParticlesBg  type="cobweb" bg={true} />
+      <ParticlesBg color='#ffffff'  type="cobweb" bg={true} />
       <Navigation />
       <Logo />
       <Rank />
