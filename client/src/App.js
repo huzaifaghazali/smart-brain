@@ -15,8 +15,8 @@ const returnClarifaiRequestOptions = (imageUrl) => {
   const USER_ID = process.env.REACT_APP_CLARIFAI_USER_ID;
   const APP_ID = process.env.REACT_APP_CLARIFAI_APP_ID;
   const MODEL_ID = 'face-detection';
-  // const IMAGE_URL = imageUrl;
-  const IMAGE_URL = 'https://samples.clarifai.com/metro-north.jpg';
+  const IMAGE_URL = imageUrl;
+  // const IMAGE_URL = 'https://samples.clarifai.com/metro-north.jpg';
 
   const raw = JSON.stringify({
     user_app_id: {
@@ -44,9 +44,9 @@ const returnClarifaiRequestOptions = (imageUrl) => {
   };
 };
 
-
 const initialState = {
   input: '',
+  imageUrl: '',
 };
 
 function App() {
@@ -54,15 +54,15 @@ function App() {
 
   const onInputChange = (event) => {
     console.log(event.target.value);
+    setState((prevState) => ({ ...prevState, input: event.target.value }));
   };
 
   const onButtonSubmit = () => {
-    console.log('clicked');
+    setState((prevState) => ({ ...prevState, imageUrl: state.input }));
+
     fetch(
       `https://api.clarifai.com/v2/models/face-detection/outputs`,
-      returnClarifaiRequestOptions(
-        'https://samples.clarifai.com/metro-north.jpg'
-      )
+      returnClarifaiRequestOptions(state.input)
     )
       .then((response) => response.json())
       .then((result) => console.log(result))
@@ -84,7 +84,7 @@ function App() {
         onInputChange={onInputChange}
         onButtonSubmit={onButtonSubmit}
       />
-      <FaceRecognition />
+      <FaceRecognition imageUrl={state.imageUrl} />
     </div>
   );
 }
