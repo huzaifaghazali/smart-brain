@@ -84,8 +84,7 @@ function App() {
         onInputChange={onInputChange}
         onButtonSubmit={onButtonSubmit}
       />
-      {/* 
-    <FaceRecognition /> */}
+      <FaceRecognition />
     </div>
   );
 }
