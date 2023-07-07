@@ -14,7 +14,7 @@ const returnClarifaiRequestOptions = (imageUrl) => {
   const PAT = process.env.REACT_APP_CLARIFAI_PAT;
   const USER_ID = process.env.REACT_APP_CLARIFAI_USER_ID;
   const APP_ID = process.env.REACT_APP_CLARIFAI_APP_ID;
-  const MODEL_ID = 'face-detection';
+  // const MODEL_ID = 'face-detection';
   const IMAGE_URL = imageUrl;
   // const IMAGE_URL = 'https://samples.clarifai.com/metro-north.jpg';
 
