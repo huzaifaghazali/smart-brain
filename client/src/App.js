@@ -59,8 +59,17 @@ function App() {
     const width = Number(image.width);
     const height = Number(image.height);
     
-    console.log(width, height);
+    return {
+      leftCol: clarifaiFace.left_col * width,
+      topRow: clarifaiFace.top_row * height,
+      rightCol: width - clarifaiFace.right_col * width,
+      bottomRow: height - clarifaiFace.bottom_row * height
+    };
   };
+
+  const displayFaceBox = (box) => {
+    setState(prevState => ({ ...prevState, box: box }))
+  }
 
   const onInputChange = (event) => {
     setState((prevState) => ({ ...prevState, input: event.target.value }));
@@ -74,7 +83,7 @@ function App() {
       returnClarifaiRequestOptions(state.input)
     )
       .then((response) => response.json())
-      .then((result) => calculateFaceLocation(result))
+      .then((result) => displayFaceBox(calculateFaceLocation(result)))
       .catch((error) => console.log('error', error));
   };
 
@@ -89,7 +98,7 @@ function App() {
         onInputChange={onInputChange}
         onButtonSubmit={onButtonSubmit}
       />
-      <FaceRecognition imageUrl={state.imageUrl} />
+      <FaceRecognition box={state.box} imageUrl={state.imageUrl} />
     </div>
   );
 }
