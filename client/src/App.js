@@ -8,6 +8,7 @@ import {
   ImageLinkForm,
   Rank,
   FaceRecognition,
+  Signin
 } from './components';
 
 const returnClarifaiRequestOptions = (imageUrl) => {
@@ -92,6 +93,7 @@ function App() {
     <div className='App'>
       <ParticlesBg color='#ffffff' type='cobweb' bg={true} />
       <Navigation />
+      <Signin />
       <Logo />
       <Rank />
       <ImageLinkForm
