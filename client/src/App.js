@@ -47,13 +47,22 @@ const returnClarifaiRequestOptions = (imageUrl) => {
 const initialState = {
   input: '',
   imageUrl: '',
+  box: {},
 };
 
 function App() {
   const [state, setState] = useState(initialState);
 
+  const calculateFaceLocation = (data) => {
+    const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
+    const image = document.getElementById('inputImage');
+    const width = Number(image.width);
+    const height = Number(image.height);
+    
+    console.log(width, height);
+  };
+
   const onInputChange = (event) => {
-    console.log(event.target.value);
     setState((prevState) => ({ ...prevState, input: event.target.value }));
   };
 
@@ -65,14 +74,10 @@ function App() {
       returnClarifaiRequestOptions(state.input)
     )
       .then((response) => response.json())
-      .then((result) => console.log(result.outputs[0].data.regions[0].region_info.bounding_box))
+      .then((result) => calculateFaceLocation(result))
       .catch((error) => console.log('error', error));
   };
 
-  // console.log(process.env.REACT_APP_CLARIFAI_PAT,
-  //   process.env.REACT_APP_CLARIFAI_USER_ID,
-  //   process.env.REACT_APP_CLARIFAI_APP_ID,
-  //   process.env.REACT_APP_CLARIFAI_API_KEY);
 
   return (
     <div className='App'>
