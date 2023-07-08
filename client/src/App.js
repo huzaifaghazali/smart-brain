@@ -102,7 +102,7 @@ function App() {
   return (
     <div className='App'>
       <ParticlesBg color='#ffffff' type='cobweb' bg={true} />
-      <Navigation />
+      <Navigation onRouteChange={onRouteChange} />
       {state.route === 'signin' ? (
         <Signin onRouteChange={onRouteChange} />
       ) : (
