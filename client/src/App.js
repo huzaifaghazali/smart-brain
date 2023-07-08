@@ -9,6 +9,7 @@ import {
   Rank,
   FaceRecognition,
   Signin,
+  Register,
 } from './components';
 
 const returnClarifaiRequestOptions = (imageUrl) => {
@@ -94,18 +95,16 @@ function App() {
     if (route === 'signout') {
       setState(initialState);
     } else if (route === 'home') {
-      setState(prevState => ({ ...prevState, isSignedIn: true }));
+      setState((prevState) => ({ ...prevState, isSignedIn: true }));
     }
-    setState(prevState => ({ ...prevState, route: route }));
+    setState((prevState) => ({ ...prevState, route: route }));
   };
 
   return (
     <div className='App'>
       <ParticlesBg color='#ffffff' type='cobweb' bg={true} />
       <Navigation onRouteChange={onRouteChange} />
-      {state.route === 'signin' ? (
-        <Signin onRouteChange={onRouteChange} />
-      ) : (
+      {state.route === 'home' ? (
         <div>
           <Logo />
           <Rank />
@@ -115,6 +114,10 @@ function App() {
           />
           <FaceRecognition box={state.box} imageUrl={state.imageUrl} />
         </div>
+      ) : state.route === 'signin' ? (
+        <Signin onRouteChange={onRouteChange} />
+      ) : (
+        <Register onRouteChange={onRouteChange} />
       )}
     </div>
   );
