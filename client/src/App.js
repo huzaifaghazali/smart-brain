@@ -8,7 +8,7 @@ import {
   ImageLinkForm,
   Rank,
   FaceRecognition,
-  Signin
+  Signin,
 } from './components';
 
 const returnClarifaiRequestOptions = (imageUrl) => {
@@ -49,28 +49,30 @@ const initialState = {
   input: '',
   imageUrl: '',
   box: {},
+  route: 'signin',
 };
 
 function App() {
   const [state, setState] = useState(initialState);
 
   const calculateFaceLocation = (data) => {
-    const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
+    const clarifaiFace =
+      data.outputs[0].data.regions[0].region_info.bounding_box;
     const image = document.getElementById('inputImage');
     const width = Number(image.width);
     const height = Number(image.height);
-    
+
     return {
       leftCol: clarifaiFace.left_col * width,
       topRow: clarifaiFace.top_row * height,
       rightCol: width - clarifaiFace.right_col * width,
-      bottomRow: height - clarifaiFace.bottom_row * height
+      bottomRow: height - clarifaiFace.bottom_row * height,
     };
   };
 
   const displayFaceBox = (box) => {
-    setState(prevState => ({ ...prevState, box: box }))
-  }
+    setState((prevState) => ({ ...prevState, box: box }));
+  };
 
   const onInputChange = (event) => {
     setState((prevState) => ({ ...prevState, input: event.target.value }));
@@ -88,19 +90,32 @@ function App() {
       .catch((error) => console.log('error', error));
   };
 
+  const onRouteChange = (route) => {
+    if (route === 'signout') {
+      setState(initialState);
+    } else if (route === 'home') {
+      setState(prevState => ({ ...prevState, isSignedIn: true }));
+    }
+    setState(prevState => ({ ...prevState, route: route }));
+  };
 
   return (
     <div className='App'>
       <ParticlesBg color='#ffffff' type='cobweb' bg={true} />
       <Navigation />
-      <Signin />
-      <Logo />
-      <Rank />
-      <ImageLinkForm
-        onInputChange={onInputChange}
-        onButtonSubmit={onButtonSubmit}
-      />
-      <FaceRecognition box={state.box} imageUrl={state.imageUrl} />
+      {state.route === 'signin' ? (
+        <Signin onRouteChange={onRouteChange} />
+      ) : (
+        <div>
+          <Logo />
+          <Rank />
+          <ImageLinkForm
+            onInputChange={onInputChange}
+            onButtonSubmit={onButtonSubmit}
+          />
+          <FaceRecognition box={state.box} imageUrl={state.imageUrl} />
+        </div>
+      )}
     </div>
   );
 }
