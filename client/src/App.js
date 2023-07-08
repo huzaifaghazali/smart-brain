@@ -51,6 +51,7 @@ const initialState = {
   imageUrl: '',
   box: {},
   route: 'signin',
+  isSignedIn: false,
 };
 
 function App() {
@@ -103,7 +104,7 @@ function App() {
   return (
     <div className='App'>
       <ParticlesBg color='#ffffff' type='cobweb' bg={true} />
-      <Navigation onRouteChange={onRouteChange} />
+      <Navigation isSignedIn={state.isSignedIn} onRouteChange={onRouteChange} />
       {state.route === 'home' ? (
         <div>
           <Logo />
