@@ -2,49 +2,61 @@ const express = require('express');
 
 const app = express();
 
-// parse the data 
+// parse the data
 app.use(express.json());
 
 const database = {
-   users: [
-      {
-         id: '123',
-         name: 'John',
-         email: 'john@gmail.com',
-         password: 'cookies',
-         entries: 0,
-         joined: new Date()
-      },
-      {
-         id: '124',
-         name: 'Sally',
-         email: 'sally@gmail.com',
-         password: 'bananas',
-         entries: 0,
-         joined: new Date()
-      },
-   ]
-}
+  users: [
+    {
+      id: '123',
+      name: 'John',
+      email: 'john@gmail.com',
+      password: 'cookies',
+      entries: 0,
+      joined: new Date(),
+    },
+    {
+      id: '124',
+      name: 'Sally',
+      email: 'sally@gmail.com',
+      password: 'bananas',
+      entries: 0,
+      joined: new Date(),
+    },
+  ],
+};
 
 const port = process.env.PORT || 3001;
 
 app.get('/', (req, res) => {
-  res.send('This is working');
+  res.send(database.users);
 });
 
 app.post('/signin', (req, res) => {
-   const {email, password} = req.body;
-   if(email === database.users[0].email && password === database.users[0].password) {
-      res.json('success');
-   } else {
-      res.status(404).json('error logging in')
-   }
+  const { email, password } = req.body;
+  if (
+    email === database.users[0].email &&
+    password === database.users[0].password
+  ) {
+    res.json('success');
+  } else {
+    res.status(404).json('error logging in');
+  }
 });
 
 app.post('/register', (req, res) => {
-  res.json('Register');
-});
+  const { name, email, password } = req.body;
+  database.users.push({
+    id: '125',
+    name: name,
+    email: email,
+    password: password,
+    entries: 0,
+    joined: new Date(),
+  });
 
+  res.json(database.users[database.users.length - 1])
+});
 
 app.listen(port, () => {
   console.log(`App is running on server ${port}`);
