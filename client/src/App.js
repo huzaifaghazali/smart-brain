@@ -125,7 +125,7 @@ function App() {
       ) : (
         <Register onRouteChange={onRouteChange} />
       )}
-      <ToastContainer position='top-center' />
+      <ToastContainer position='top-center' theme="dark"/>
     </div>
   );
 }
