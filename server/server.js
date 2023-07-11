@@ -1,10 +1,14 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
+const cors = require("cors");
 
 const app = express();
 
 // parse the data
 app.use(express.json());
+
+// allows CORs policy
+app.use(cors());
 
 const database = {
   users: [

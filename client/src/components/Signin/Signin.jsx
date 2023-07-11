@@ -1,10 +1,42 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const Signin = ({ onRouteChange }) => {
+  const [signInEmail, setSignInEmail] = useState('');
+  const [signInPassword, setSignInPassword] = useState('');
+
+  const onEmailChange = (event) => {
+    setSignInEmail(event.target.value);
+  }
+
+
+  const onPasswordChange = (event) => {
+    setSignInPassword(event.target.value);
+  }
+
+  const onSubmitSignIn = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/signin', {
+        method: 'post',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          email: signInEmail,
+          password: signInPassword
+        })
+      })
+      const data = await response.json();
+      if(data === 'success') {
+        onRouteChange('home')
+      }
+    } catch (error) {
+      console.log('Login in error',error);
+    }
+    
+  }
+
   return (
     <article className='br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center'>
       <main className='pa4 black-80'>
-        <form className='measure'>
+        <div className='measure'>
           <fieldset id='sign_up' className='ba b--transparent ph0 mh0'>
             <legend className='f1 fw6 ph0 mh0'>Sign In</legend>
             <div className='mt3'>
@@ -16,6 +48,8 @@ const Signin = ({ onRouteChange }) => {
                 type='email'
                 name='email-address'
                 id='email-address'
+                value={signInEmail}
+                onChange={onEmailChange}
               />
             </div>
             <div className='mv3'>
@@ -27,12 +61,13 @@ const Signin = ({ onRouteChange }) => {
                 type='password'
                 name='password'
                 id='password'
+                onChange= {onPasswordChange}
               />
             </div>
           </fieldset>
           <div className=''>
             <input
-              onClick={() => onRouteChange('home')}
+              onClick={onSubmitSignIn}
               className='b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib'
               type='submit'
               value='Sign in'
@@ -47,7 +82,7 @@ const Signin = ({ onRouteChange }) => {
               Register
             </p>
           </div>
-        </form>
+        </div>
       </main>
     </article>
   );
