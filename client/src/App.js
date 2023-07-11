@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import ParticlesBg from 'particles-bg';
+import { ToastContainer } from 'react-toastify';
+
 import './App.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 import {
   Navigation,
@@ -122,6 +125,7 @@ function App() {
       ) : (
         <Register onRouteChange={onRouteChange} />
       )}
+      <ToastContainer position='top-center' />
     </div>
   );
 }

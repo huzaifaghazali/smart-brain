@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 
 const Signin = ({ onRouteChange }) => {
   const [signInEmail, setSignInEmail] = useState('');
@@ -25,7 +26,11 @@ const Signin = ({ onRouteChange }) => {
       })
       const data = await response.json();
       if(data === 'success') {
+        console.log(data);
+        toast.success('Login successfully');
         onRouteChange('home')
+      } else {
+        toast.error(data)
       }
     } catch (error) {
       console.log('Login in error',error);
