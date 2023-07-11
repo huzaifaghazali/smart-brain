@@ -1,4 +1,5 @@
 const express = require('express');
+const bcrypt = require('bcrypt');
 
 const app = express();
 
@@ -46,6 +47,9 @@ app.post('/signin', (req, res) => {
 
 app.post('/register', (req, res) => {
   const { name, email, password } = req.body;
+  bcrypt.hash(password, (saltRounds = 1), function (err, hash) {
+    console.log(hash);
+  });
   database.users.push({
     id: '125',
     name: name,
