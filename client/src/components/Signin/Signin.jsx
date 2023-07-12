@@ -26,7 +26,6 @@ const Signin = ({ onRouteChange, loadUser }) => {
       })
       const user = await response.json();
       if(user.id) {
-        console.log(user);
         loadUser(user);
         toast.success('Login successfully');
         onRouteChange('home');

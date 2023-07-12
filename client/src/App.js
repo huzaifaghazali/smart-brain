@@ -133,7 +133,7 @@ function App() {
       {state.route === 'home' ? (
         <div>
           <Logo />
-          <Rank name={state.name} entries={state.entries} />
+          <Rank name={state.user.name} entries={state.user.entries} />
           <ImageLinkForm
             onInputChange={onInputChange}
             onPictureSubmit={onPictureSubmit}
