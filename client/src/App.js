@@ -103,7 +103,7 @@ function App() {
     setState((prevState) => ({ ...prevState, input: event.target.value }));
   };
 
-  const onButtonSubmit = () => {
+  const onPictureSubmit = () => {
     setState((prevState) => ({ ...prevState, imageUrl: state.input }));
 
     fetch(
@@ -136,7 +136,7 @@ function App() {
           <Rank name={state.name} entries={state.entries} />
           <ImageLinkForm
             onInputChange={onInputChange}
-            onButtonSubmit={onButtonSubmit}
+            onPictureSubmit={onPictureSubmit}
           />
           <FaceRecognition box={state.box} imageUrl={state.imageUrl} />
         </div>
