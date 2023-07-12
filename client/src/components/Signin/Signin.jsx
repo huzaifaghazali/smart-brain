@@ -33,7 +33,7 @@ const Signin = ({ onRouteChange }) => {
         toast.error(data)
       }
     } catch (error) {
-      console.log('Login in error',error);
+      console.log('Login error',error);
     }
     
   }

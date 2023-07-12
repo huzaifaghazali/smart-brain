@@ -55,10 +55,30 @@ const initialState = {
   box: {},
   route: 'signin',
   isSignedIn: false,
+  user: {
+    id: '',
+    name: '',
+    email: '',
+    entries: 0,
+    joined: '',
+  },
 };
 
 function App() {
   const [state, setState] = useState(initialState);
+
+  const loadUser = (data) => {
+    setState((prevState) => ({
+      ...prevState,
+      user: {
+        id: data.id,
+        name: data.name,
+        email: data.email,
+        entries: data.entries,
+        joined: data.joined,
+      },
+    }));
+  };
 
   const calculateFaceLocation = (data) => {
     const clarifaiFace =
@@ -123,9 +143,9 @@ function App() {
       ) : state.route === 'signin' ? (
         <Signin onRouteChange={onRouteChange} />
       ) : (
-        <Register onRouteChange={onRouteChange} />
+        <Register loadUser={loadUser} onRouteChange={onRouteChange} />
       )}
-      <ToastContainer position='top-center' theme="dark"/>
+      <ToastContainer position='top-center' theme='dark' />
     </div>
   );
 }
