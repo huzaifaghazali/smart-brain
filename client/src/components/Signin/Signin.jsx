@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 
-const Signin = ({ onRouteChange }) => {
+const Signin = ({ onRouteChange, loadUser }) => {
   const [signInEmail, setSignInEmail] = useState('');
   const [signInPassword, setSignInPassword] = useState('');
 
@@ -24,13 +24,14 @@ const Signin = ({ onRouteChange }) => {
           password: signInPassword
         })
       })
-      const data = await response.json();
-      if(data === 'success') {
-        console.log(data);
+      const user = await response.json();
+      if(user.id) {
+        console.log(user);
+        loadUser(user);
         toast.success('Login successfully');
-        onRouteChange('home')
+        onRouteChange('home');
       } else {
-        toast.error(data)
+        toast.error('Error Logging in')
       }
     } catch (error) {
       console.log('Login error',error);
