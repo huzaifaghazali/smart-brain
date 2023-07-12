@@ -111,7 +111,26 @@ function App() {
       returnClarifaiRequestOptions(state.input)
     )
       .then((response) => response.json())
-      .then((result) => displayFaceBox(calculateFaceLocation(result)))
+      .then((result) => {
+        if (result) {
+          fetch('http://localhost:3001/image', {
+            method: 'put',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              id: state.user.id,
+            }),
+          })
+            .then((response) => response.json())
+            .then((count) => {
+              setState((prevState) => ({
+                ...prevState,
+                user: { ...prevState.user, entries: count },
+              }));
+            })
+            .catch(console.log);
+        }
+        displayFaceBox(calculateFaceLocation(result));
+      })
       .catch((error) => console.log('error', error));
   };
 
