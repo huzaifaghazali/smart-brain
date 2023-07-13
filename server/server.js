@@ -71,27 +71,26 @@ app.post('/register', (req, res) => {
       name: name,
       joined: new Date(),
     })
-    .then(user => {
+    .then((user) => {
       res.json(user[0]);
     })
-    .catch(err => res.status(400).json('Unable to register'));
-
-  
+    .catch((err) => res.status(400).json('Unable to register'));
 });
 
 app.get('/profile/:id', (req, res) => {
   const { id } = req.params;
-  let found = false;
-  database.users.forEach((user) => {
-    if (user.id === id) {
-      found = true;
-      return res.json(user.entries);
-    }
-  });
-
-  if (!found) {
-    res.status(400).json('not found');
-  }
+  postgresDB
+    .select('*')
+    .from('users')
+    .where({
+      id,
+    })
+    .then((user) => {
+      if (user.length) {
+        res.json(user[0]);
+      }
+    })
+    .catch((err) => res.status(400).json('Not found'));
 });
 
 app.put('/image', (req, res) => {
