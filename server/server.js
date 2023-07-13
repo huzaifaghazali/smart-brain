@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const cors = require('cors');
 const knex = require('knex');
-require('dotenv').config()
+require('dotenv').config();
 
 const postgresDB = knex({
   client: 'pg',
@@ -14,8 +14,6 @@ const postgresDB = knex({
     database: 'smart-brain',
   },
 });
-
-
 
 const app = express();
 
@@ -66,13 +64,19 @@ app.post('/signin', (req, res) => {
 
 app.post('/register', (req, res) => {
   const { name, email, password } = req.body;
-  postgresDB('users').insert({
-    email: email,
-    name: name,
-    joined: new Date()
-  }).then(console.log)
+  postgresDB('users')
+    .returning('*')
+    .insert({
+      email: email,
+      name: name,
+      joined: new Date(),
+    })
+    .then(user => {
+      res.json(user[0]);
+    })
+    .catch(err => res.status(400).json('Unable to register'));
 
-  res.json(database.users[database.users.length - 1]);
+  
 });
 
 app.get('/profile/:id', (req, res) => {
