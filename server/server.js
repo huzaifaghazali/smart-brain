@@ -2,19 +2,20 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const cors = require('cors');
 const knex = require('knex');
+require('dotenv').config()
 
-const postgres = knex({
+const postgresDB = knex({
   client: 'pg',
   connection: {
-    host: '127.0.0.1',
-    port: 3306,
-    user: 'postgres',
-    password: '',
+    host: process.env.DATABASE_HOST,
+    port: process.env.DATABASE_PORT,
+    user: process.env.DATABASE_USER,
+    password: process.env.DATABASE_PASSWORD,
     database: 'smart-brain',
   },
 });
 
-postgres.select('*').from('users');
+
 
 const app = express();
 
@@ -65,16 +66,11 @@ app.post('/signin', (req, res) => {
 
 app.post('/register', (req, res) => {
   const { name, email, password } = req.body;
-  bcrypt.hash(password, (saltRounds = 1), function (err, hash) {
-    console.log(hash);
-  });
-  database.users.push({
-    id: '125',
-    name: name,
+  postgresDB('users').insert({
     email: email,
-    entries: 0,
-    joined: new Date(),
-  });
+    name: name,
+    joined: new Date()
+  }).then(console.log)
 
   res.json(database.users[database.users.length - 1]);
 });
