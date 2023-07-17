@@ -6,6 +6,8 @@ require('dotenv').config();
 
 const signin = require('./controllers/signin');
 const register = require('./controllers/register');
+const profile = require('./controllers/profile');
+const image = require('./controllers/image');
 
 const postgresDB = knex({
   client: 'pg',
@@ -39,33 +41,12 @@ app.post('/register', (req, res) => {
   register.handleRegister(req, res, postgresDB, bcrypt);
 });
 
-
 app.get('/profile/:id', (req, res) => {
-  const { id } = req.params;
-  postgresDB
-    .select('*')
-    .from('users')
-    .where({
-      id,
-    })
-    .then((user) => {
-      if (user.length) {
-        res.json(user[0]);
-      }
-    })
-    .catch((err) => res.status(400).json('Not found'));
+  profile.handleProfile(req, res, postgresDB);
 });
 
 app.put('/image', (req, res) => {
-  const { id } = req.body;
-  postgresDB('users')
-    .where('id', '=', id)
-    .increment('entries', 1)
-    .returning('entries')
-    .then((entries) => {
-      res.json(entries[0].entries);
-    })
-    .catch((err) => res.status(400).json('unable to get entries'));
+  image.handleImage(req, res, postgresDB);
 });
 
 app.listen(port, () => {
