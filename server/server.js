@@ -4,6 +4,9 @@ const cors = require('cors');
 const knex = require('knex');
 require('dotenv').config();
 
+const signin = require('./controllers/signin');
+const register = require('./controllers/register');
+
 const postgresDB = knex({
   client: 'pg',
   connection: {
@@ -29,30 +32,17 @@ app.get('/', (req, res) => {
   res.send(database.users);
 });
 
-app.post('/signin', async (req, res) => {
-  const { email, password } = req.body;
+// app.post('/signin', (req, res) => {
+//   signin.handleSignin(postgresDB, bcrypt);
+// });
 
-  postgresDB
-    .select('email', 'hash')
-    .from('login')
-    .where('email', '=', email)
-    .then((data) => {
-      const result = bcrypt.compareSync(password, data[0].hash);
-      if (result) {
-        return postgresDB
-          .select('*')
-          .from('users')
-          .where('email', '=', email)
-          .then((user) => {
-            res.json(user[0]);
-          })
-          .catch((err) => res.status(400).json('Unable to Login'));
-      } else {
-        res.status(400).json('Wrong Credentials');
-      }
-    })
-    .catch((err) => res.status(400).json('Wrong Credentials'));
+app.post('/signin', (req, res) => {
+  signin.handleSignin(req, res, postgresDB, bcrypt);
 });
+app.post('/register', (req, res) => {
+  register.handleRegister(req, res, postgresDB, bcrypt);
+});
+
 
 app.get('/profile/:id', (req, res) => {
   const { id } = req.params;
@@ -68,34 +58,6 @@ app.get('/profile/:id', (req, res) => {
       }
     })
     .catch((err) => res.status(400).json('Not found'));
-});
-
-app.post('/register', async (req, res) => {
-  const { name, email, password } = req.body;
-  const hash = await bcrypt.hash(password, saltRounds = 10);
-  postgresDB.transaction(trx => {
-    trx.insert({
-      hash: hash,
-      email: email
-    })
-      .into('login')
-      .returning('email')
-      .then(loginEmail => {
-       return postgresDB('users')
-          .returning('*')
-          .insert({
-            email: loginEmail[0].email,
-            name: name,
-            joined: new Date(),
-          })
-          .then((user) => {
-            res.json(user[0]);
-          })
-      })
-      .then(trx.commit)
-      .catch(trx.rollback)
-  })
-    .catch((err) => res.status(400).json('Unable to register'));
 });
 
 app.put('/image', (req, res) => {
