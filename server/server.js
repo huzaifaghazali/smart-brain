@@ -32,10 +32,6 @@ app.get('/', (req, res) => {
   res.send(database.users);
 });
 
-// app.post('/signin', (req, res) => {
-//   signin.handleSignin(postgresDB, bcrypt);
-// });
-
 app.post('/signin', (req, res) => {
   signin.handleSignin(req, res, postgresDB, bcrypt);
 });

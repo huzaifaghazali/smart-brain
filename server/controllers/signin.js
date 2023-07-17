@@ -1,5 +1,9 @@
 const handleSignin = (req, res, postgresDB, bcrypt) => {
    const { email, password } = req.body;
+
+   if (!email || !password) {
+      return res.status(400).json('Please fill out all the fields');
+    }
  
    postgresDB
      .select('email', 'hash')

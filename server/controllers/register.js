@@ -1,5 +1,8 @@
 const handleRegister = async (req, res, postgresDB, bcrypt) => {
   const { name, email, password } = req.body;
+  if (!email || !name || !password) {
+    return res.status(400).json('Please fill out all the fields');
+  }
   const hash = await bcrypt.hash(password, (saltRounds = 10));
   postgresDB
     .transaction((trx) => {
@@ -29,5 +32,5 @@ const handleRegister = async (req, res, postgresDB, bcrypt) => {
 };
 
 module.exports = {
-   handleRegister
-}
+  handleRegister,
+};
