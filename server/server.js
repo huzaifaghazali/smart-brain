@@ -7,7 +7,12 @@ require('dotenv').config();
 const signin = require('./controllers/signin');
 const register = require('./controllers/register');
 
-const { handleImage, handleProfile } = require('./controllers/');
+const {
+  handleSignin,
+  handleRegister,
+  handleImage,
+  handleProfile,
+} = require('./controllers/');
 
 const postgresDB = knex({
   client: 'pg',
@@ -35,10 +40,10 @@ app.get('/', (req, res) => {
 });
 
 app.post('/signin', (req, res) => {
-  signin.handleSignin(req, res, postgresDB, bcrypt);
+  handleSignin(req, res, postgresDB, bcrypt);
 });
 app.post('/register', (req, res) => {
-  register.handleRegister(req, res, postgresDB, bcrypt);
+  handleRegister(req, res, postgresDB, bcrypt);
 });
 
 app.get('/profile/:id', (req, res) => {
