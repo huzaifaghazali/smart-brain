@@ -15,6 +15,11 @@ const Register = ({ onRouteChange, loadUser }) => {
   };
 
   const onSubmitSignUp = async () => {
+    const { name, email, password } = registerForm;
+    if (name === '' || email === '' || password === '') {
+      toast.error('Please enter all values');
+      return;
+    }
     try {
       const response = await fetch('http://localhost:3001/register', {
         method: 'post',
@@ -27,7 +32,6 @@ const Register = ({ onRouteChange, loadUser }) => {
       });
       const user = await response.json();
       if (user) {
-        console.log(user);
         loadUser(user);
         toast.success('Register successfully');
         onRouteChange('home');
@@ -56,6 +60,7 @@ const Register = ({ onRouteChange, loadUser }) => {
                 id='name'
                 value={registerForm.name}
                 onChange={handleChange}
+                required
               />
             </div>
             <div className='mt3'>
@@ -69,6 +74,7 @@ const Register = ({ onRouteChange, loadUser }) => {
                 id='email'
                 value={registerForm.email}
                 onChange={handleChange}
+                required
               />
             </div>
             <div className='mv3'>
@@ -82,6 +88,7 @@ const Register = ({ onRouteChange, loadUser }) => {
                 id='password'
                 value={registerForm.password}
                 onChange={handleChange}
+                required
               />
             </div>
           </fieldset>
