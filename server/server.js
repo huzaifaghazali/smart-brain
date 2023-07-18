@@ -4,14 +4,12 @@ const cors = require('cors');
 const knex = require('knex');
 require('dotenv').config();
 
-const signin = require('./controllers/signin');
-const register = require('./controllers/register');
-
 const {
   handleSignin,
   handleRegister,
   handleImage,
   handleProfile,
+  handleApiCall
 } = require('./controllers/');
 
 const postgresDB = knex({
@@ -36,7 +34,7 @@ app.use(cors());
 const port = process.env.PORT || 3001;
 
 app.get('/', (req, res) => {
-  res.send(database.users);
+  res.send('Smart brain');
 });
 
 app.post('/signin', (req, res) => {
@@ -53,6 +51,8 @@ app.get('/profile/:id', (req, res) => {
 app.put('/image', (req, res) => {
   handleImage(req, res, postgresDB);
 });
+
+app.post('/imageurl', (req, res) => { handleApiCall(req, res)})
 
 app.listen(port, () => {
   console.log(`App is running on server ${port}`);

@@ -15,40 +15,6 @@ import {
   Register,
 } from './components';
 
-const returnClarifaiRequestOptions = (imageUrl) => {
-  const PAT = process.env.REACT_APP_CLARIFAI_PAT;
-  const USER_ID = process.env.REACT_APP_CLARIFAI_USER_ID;
-  const APP_ID = process.env.REACT_APP_CLARIFAI_APP_ID;
-  // const MODEL_ID = 'face-detection';
-  const IMAGE_URL = imageUrl;
-  // const IMAGE_URL = 'https://samples.clarifai.com/metro-north.jpg';
-
-  const raw = JSON.stringify({
-    user_app_id: {
-      user_id: USER_ID,
-      app_id: APP_ID,
-    },
-    inputs: [
-      {
-        data: {
-          image: {
-            url: IMAGE_URL,
-          },
-        },
-      },
-    ],
-  });
-
-  return {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      Authorization: 'Key ' + PAT,
-    },
-    body: raw,
-  };
-};
-
 const initialState = {
   input: '',
   imageUrl: '',
@@ -106,12 +72,16 @@ function App() {
   const onPictureSubmit = () => {
     setState((prevState) => ({ ...prevState, imageUrl: state.input }));
 
-    fetch(
-      `https://api.clarifai.com/v2/models/face-detection/outputs`,
-      returnClarifaiRequestOptions(state.input)
-    )
+    fetch('http://localhost:3001/imageurl', {
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        input: state.input,
+      }),
+    })
       .then((response) => response.json())
       .then((result) => {
+        console.log(result);
         if (result) {
           fetch('http://localhost:3001/image', {
             method: 'put',
