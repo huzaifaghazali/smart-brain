@@ -81,7 +81,6 @@ function App() {
     })
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         if (result) {
           fetch('http://localhost:3001/image', {
             method: 'put',

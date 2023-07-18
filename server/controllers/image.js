@@ -1,36 +1,14 @@
-const returnClarifaiRequestOptions = (imageUrl) => {
-  const PAT = process.env.CLARIFAI_PAT;
-  const USER_ID = process.env.CLARIFAI_USER_ID;
-  const APP_ID = process.env.CLARIFAI_APP_ID;
-  // const MODEL_ID = 'face-detection';
-  const IMAGE_URL = imageUrl;
+const { returnClarifaiRequestOptions } = require('../utils');
 
-  const raw = JSON.stringify({
-    user_app_id: {
-      user_id: USER_ID,
-      app_id: APP_ID,
-    },
-    inputs: [
-      {
-        data: {
-          image: {
-            url: IMAGE_URL,
-          },
-        },
-      },
-    ],
-  });
+const { ClarifaiStub, grpc } = require('clarifai-nodejs-grpc');
 
-  return {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      Authorization: 'Key ' + PAT,
-    },
-    body: raw,
-  };
-};
+const stub = ClarifaiStub.grpc();
 
+const metadata = new grpc.Metadata();
+metadata.set('authorization', `Key ${process.env.CLARIFAI_API_KEY}`);
+
+// Method 1 Using simple fetch
+/*
 const handleApiCall = (req, res) => {
   fetch(
     `https://api.clarifai.com/v2/models/face-detection/outputs`,
@@ -39,6 +17,37 @@ const handleApiCall = (req, res) => {
     .then((response) => response.json())
     .then((data) => res.json(data))
     .catch((err) => res.status(400).json('Unable to work with API'));
+};
+*/
+
+// Method 2 using grpc
+const handleApiCall = (req, res) => {
+  stub.PostModelOutputs(
+    {
+      // This is the model ID of a FACE DETECT model.
+      model_id: 'face-detection',
+      inputs: [{ data: { image: { url: req.body.input } } }],
+    },
+    metadata,
+    (err, response) => {
+      if (err) {
+        console.log("Unable to work with API: " + err);
+        return res.status(503).json({message: `Unable to work with API: ${err}`})
+      }
+
+      if (response.status.code !== 10000) {
+        console.log("Received failed status: " + response.status.description + "\n" + response.status.details);
+        return res.status(404).json({message: `Error: ${response.status.description}`})
+      }
+
+      console.log('Predicted concepts, with confidence values:');
+      for (const c of response.outputs[0].data.concepts) {
+        console.log(c.name + ': ' + c.value);
+      }
+
+      res.json(response);
+    }
+  );
 };
 
 const handleImage = (req, res, postgresDB) => {
