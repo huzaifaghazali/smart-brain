@@ -1,8 +1,9 @@
+require('dotenv').config();
 const express = require('express');
 const bcrypt = require('bcrypt');
 const cors = require('cors');
-const knex = require('knex');
-require('dotenv').config();
+
+const { postgresDB } = require('./database/postgres');
 
 const {
   handleSignin,
@@ -12,16 +13,6 @@ const {
   handleApiCall
 } = require('./controllers/');
 
-const postgresDB = knex({
-  client: 'pg',
-  connection: {
-    host: process.env.DATABASE_HOST,
-    port: process.env.DATABASE_PORT,
-    user: process.env.DATABASE_USER,
-    password: process.env.DATABASE_PASSWORD,
-    database: 'smart-brain',
-  },
-});
 
 const app = express();
 

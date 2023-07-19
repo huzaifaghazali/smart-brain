@@ -16,7 +16,7 @@ const handleSignin = async (req, res, postgresDB, bcrypt) => {
     }
 
     const result = await bcrypt.compare(password, data[0].hash);
-    
+
     if (result) {
       const user = await postgresDB
         .select('*')
