@@ -1,19 +1,17 @@
-const handleProfile = (req, res, postgresDB) => {
-   const { id } = req.params;
-   postgresDB
-     .select('*')
-     .from('users')
-     .where({
-       id,
-     })
-     .then((user) => {
-       if (user.length) {
-         res.json(user[0]);
-       }
-     })
-     .catch((err) => res.status(400).json('Not found'));
- }
+const handleProfile = async (req, res, postgresDB) => {
+  const { id } = req.params;
+  try {
+    const user = await postgresDB.select('*').from('users').where({ id });
+    if (user.length) {
+      res.json(user[0]);
+    } else {
+      res.status(404).json('Not found');
+    }
+  } catch (err) {
+    res.status(500).json('Internal server error');
+  }
+};
 
- module.exports = {
-   handleProfile
- }
+module.exports = {
+  handleProfile,
+};
