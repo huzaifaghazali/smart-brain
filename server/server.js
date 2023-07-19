@@ -1,16 +1,10 @@
 require('dotenv').config();
 const express = require('express');
-const bcrypt = require('bcrypt');
+
 const cors = require('cors');
 
-const {
-  handleSignin,
-  handleRegister,
-  handleImage,
-  handleProfile,
-  handleApiCall
-} = require('./controllers/');
-
+// router
+const apiRouter = require('./routes/apiRoutes');
 
 const app = express();
 
@@ -26,23 +20,9 @@ app.get('/', (req, res) => {
   res.send('Smart brain');
 });
 
-app.post('/signin', (req, res) => {
-  handleSignin(req, res, bcrypt);
-});
 
-app.post('/register', (req, res) => {
-  handleRegister(req, res, bcrypt);
-});
-
-app.get('/profile/:id', (req, res) => {
-  handleProfile(req, res);
-});
-
-app.put('/image', (req, res) => {
-  handleImage(req, res);
-});
-
-app.post('/imageurl', (req, res) => { handleApiCall(req, res)})
+// Routers middleware
+app.use('/', apiRouter);
 
 app.listen(port, () => {
   console.log(`App is running on server ${port}`);
