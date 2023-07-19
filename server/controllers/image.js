@@ -31,13 +31,22 @@ const handleApiCall = (req, res) => {
     metadata,
     (err, response) => {
       if (err) {
-        console.log("Unable to work with API: " + err);
-        return res.status(503).json({message: `Unable to work with API: ${err}`})
+        console.log('Unable to work with API: ' + err);
+        return res
+          .status(503)
+          .json({ message: `Unable to work with API: ${err}` });
       }
 
       if (response.status.code !== 10000) {
-        console.log("Received failed status: " + response.status.description + "\n" + response.status.details);
-        return res.status(404).json({message: `Error: ${response.status.description}`})
+        console.log(
+          'Received failed status: ' +
+            response.status.description +
+            '\n' +
+            response.status.details
+        );
+        return res
+          .status(404)
+          .json({ message: `Error: ${response.status.description}` });
       }
 
       console.log('Predicted concepts, with confidence values:');
@@ -50,16 +59,18 @@ const handleApiCall = (req, res) => {
   );
 };
 
-const handleImage = (req, res, postgresDB) => {
+const handleImage = async (req, res, postgresDB) => {
   const { id } = req.body;
-  postgresDB('users')
-    .where('id', '=', id)
-    .increment('entries', 1)
-    .returning('entries')
-    .then((entries) => {
-      res.json(entries[0].entries);
-    })
-    .catch((err) => res.status(400).json('unable to get entries'));
+  try {
+    const entries = await postgresDB('users')
+      .where('id', '=', id)
+      .increment('entries', 1)
+      .returning('entries');
+
+    res.json(entries[0].entries);
+  } catch (err) {
+    res.status(400).json('unable to get entries');
+  }
 };
 
 module.exports = {
