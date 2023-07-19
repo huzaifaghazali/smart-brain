@@ -1,32 +1,37 @@
-const handleSignin = (req, res, postgresDB, bcrypt) => {
-   const { email, password } = req.body;
+const handleSignin = async (req, res, postgresDB, bcrypt) => {
+  const { email, password } = req.body;
 
-   if (!email || !password) {
-      return res.status(400).json('Please fill out all the fields');
+  if (!email || !password) {
+    return res.status(400).json('Please fill out all the fields');
+  }
+
+  try {
+    const data = await postgresDB
+      .select('email', 'hash')
+      .from('login')
+      .where('email', '=', email);
+
+    if (data.length === 0) {
+      return res.status(400).json('Wrong Credentials');
     }
- 
-   postgresDB
-     .select('email', 'hash')
-     .from('login')
-     .where('email', '=', email)
-     .then((data) => {
-       const result = bcrypt.compareSync(password, data[0].hash);
-       if (result) {
-         return postgresDB
-           .select('*')
-           .from('users')
-           .where('email', '=', email)
-           .then((user) => {
-             res.json(user[0]);
-           })
-           .catch((err) => res.status(400).json('Unable to Login'));
-       } else {
-         res.status(400).json('Wrong Credentials');
-       }
-     })
-     .catch((err) => res.status(400).json('Wrong Credentials'));
- }
 
- module.exports = {
-   handleSignin
- }
+    const result = await bcrypt.compare(password, data[0].hash);
+    
+    if (result) {
+      const user = await postgresDB
+        .select('*')
+        .from('users')
+        .where('email', '=', email);
+
+      res.json(user[0]);
+    } else {
+      res.status(400).json('Wrong Credentials');
+    }
+  } catch (err) {
+    res.status(400).json('Wrong Credentials');
+  }
+};
+
+module.exports = {
+  handleSignin,
+};
