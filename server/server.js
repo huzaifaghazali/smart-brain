@@ -3,8 +3,6 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const cors = require('cors');
 
-const { postgresDB } = require('./database/postgres');
-
 const {
   handleSignin,
   handleRegister,
@@ -29,18 +27,19 @@ app.get('/', (req, res) => {
 });
 
 app.post('/signin', (req, res) => {
-  handleSignin(req, res, postgresDB, bcrypt);
+  handleSignin(req, res, bcrypt);
 });
+
 app.post('/register', (req, res) => {
-  handleRegister(req, res, postgresDB, bcrypt);
+  handleRegister(req, res, bcrypt);
 });
 
 app.get('/profile/:id', (req, res) => {
-  handleProfile(req, res, postgresDB);
+  handleProfile(req, res);
 });
 
 app.put('/image', (req, res) => {
-  handleImage(req, res, postgresDB);
+  handleImage(req, res);
 });
 
 app.post('/imageurl', (req, res) => { handleApiCall(req, res)})

@@ -1,4 +1,6 @@
-const handleProfile = async (req, res, postgresDB) => {
+const { postgresDB } = require('../database/postgres');
+
+const handleProfile = async (req, res) => {
   const { id } = req.params;
   try {
     const user = await postgresDB.select('*').from('users').where({ id });

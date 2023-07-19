@@ -1,5 +1,6 @@
-const { returnClarifaiRequestOptions } = require('../utils');
+const { postgresDB } = require('../database/postgres');
 
+const { returnClarifaiRequestOptions } = require('../utils');
 const { ClarifaiStub, grpc } = require('clarifai-nodejs-grpc');
 
 const stub = ClarifaiStub.grpc();
@@ -59,7 +60,7 @@ const handleApiCall = (req, res) => {
   );
 };
 
-const handleImage = async (req, res, postgresDB) => {
+const handleImage = async (req, res) => {
   const { id } = req.body;
   try {
     const entries = await postgresDB('users')

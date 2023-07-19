@@ -1,4 +1,6 @@
-const handleRegister = async (req, res, postgresDB, bcrypt) => {
+const { postgresDB } = require('../database/postgres');
+
+const handleRegister = async (req, res, bcrypt) => {
   const { name, email, password } = req.body;
 
   if (!email || !name || !password) {
