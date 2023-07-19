@@ -6,6 +6,9 @@ const cors = require('cors');
 // router
 const apiRouter = require('./routes/apiRoutes');
 
+// middleware
+const notFoundMiddleware = require('./middleware/notFound');
+
 const app = express();
 
 // parse the data
@@ -23,6 +26,8 @@ app.get('/', (req, res) => {
 
 // Routers middleware
 app.use('/', apiRouter);
+
+app.use(notFoundMiddleware);
 
 app.listen(port, () => {
   console.log(`App is running on server ${port}`);
