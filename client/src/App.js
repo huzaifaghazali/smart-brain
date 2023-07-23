@@ -18,7 +18,7 @@ import {
 const initialState = {
   input: '',
   imageUrl: '',
-  box: {},
+  boxes: [],
   route: 'signin',
   isSignedIn: false,
   user: {
@@ -46,23 +46,24 @@ function App() {
     }));
   };
 
-  const calculateFaceLocation = (data) => {
-    const clarifaiFace =
-      data.outputs[0].data.regions[0].region_info.bounding_box;
-    const image = document.getElementById('inputImage');
-    const width = Number(image.width);
-    const height = Number(image.height);
+  const calculateFaceLocations = (data) => {
+    return data.outputs[0].data.regions.map((face) => {
+      const clarifaiFace = face.region_info.bounding_box;
+      const image = document.getElementById('inputImage');
+      const width = Number(image.width);
+      const height = Number(image.height);
 
-    return {
-      leftCol: clarifaiFace.left_col * width,
-      topRow: clarifaiFace.top_row * height,
-      rightCol: width - clarifaiFace.right_col * width,
-      bottomRow: height - clarifaiFace.bottom_row * height,
-    };
+      return {
+        leftCol: clarifaiFace.left_col * width,
+        topRow: clarifaiFace.top_row * height,
+        rightCol: width - clarifaiFace.right_col * width,
+        bottomRow: height - clarifaiFace.bottom_row * height,
+      };
+    });
   };
 
-  const displayFaceBox = (box) => {
-    setState((prevState) => ({ ...prevState, box: box }));
+  const displayFaceBoxes = (boxes) => {
+    setState((prevState) => ({ ...prevState, boxes: boxes }));
   };
 
   const onInputChange = (event) => {
@@ -98,7 +99,8 @@ function App() {
             })
             .catch(console.log);
         }
-        displayFaceBox(calculateFaceLocation(result));
+        console.log(result);
+        displayFaceBoxes(calculateFaceLocations(result));
       })
       .catch((error) => console.log('error', error));
   };
@@ -126,7 +128,7 @@ function App() {
             onInputChange={onInputChange}
             onPictureSubmit={onPictureSubmit}
           />
-          <FaceRecognition box={state.box} imageUrl={state.imageUrl} />
+          <FaceRecognition boxes={state.boxes} imageUrl={state.imageUrl} />
         </div>
       ) : state.route === 'signin' ? (
         <Signin loadUser={loadUser} onRouteChange={onRouteChange} />
