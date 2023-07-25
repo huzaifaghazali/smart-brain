@@ -6,6 +6,8 @@ services:
   smart-brain-api:
     container_name: backend
     build: ./
+    volumes:
+      - ./:/usr/src/server
     command: npm start
     working_dir: /usr/src/server
     ports:
