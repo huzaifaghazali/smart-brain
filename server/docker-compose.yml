@@ -2,6 +2,19 @@ version: '3.8'
 
 services:
 
+  # PostgreSQL
+  postgres:
+    container_name: postgres
+    build: ./postgres
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: test
+      POSTGRES_URL: postgres://postgres:test@localhost:5432/smart-brain
+      POSTGRES_DB: smart-brain
+      POSTGRES_HOST: postgres
+    ports:
+      - '5432:5432'
+
   # Backend
   smart-brain-api:
     container_name: backend
