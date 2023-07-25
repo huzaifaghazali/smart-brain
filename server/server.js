@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 
 const cors = require('cors');
+const morgan = require('morgan');
 
 // router
 const apiRouter = require('./routes/apiRoutes');
@@ -11,11 +12,9 @@ const notFoundMiddleware = require('./middleware/notFound');
 
 const app = express();
 
-// parse the data
-app.use(express.json());
-
-// allows CORs policy
-app.use(cors());
+app.use(morgan('tiny')); // logging request details
+app.use(express.json()); // parse the data
+app.use(cors()); // allows CORs policy
 
 const port = process.env.PORT || 3001;
 
