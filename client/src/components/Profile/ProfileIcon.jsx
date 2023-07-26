@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import PIcon from '../../assets/images/profileIcon.svg';
+import PIcon from '../../assets/images/profileIcon1.svg';
 
 const ProfileIcon = () => {
   const [dropDownOpen, setDropDownOpen] = useState(false);
+
   return (
     <div className='pa4 tc'>
       <img
