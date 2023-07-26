@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import ParticlesBg from 'particles-bg';
 import { ToastContainer } from 'react-toastify';
+import ParticlesBg from 'particles-bg';
+import {calculateFaceLocations} from './utils/faceLocation';
 
-import './App.css';
 import 'react-toastify/dist/ReactToastify.css';
+import './App.css';
 
 import {
   Navigation,
@@ -44,22 +45,6 @@ function App() {
         joined: data.joined,
       },
     }));
-  };
-
-  const calculateFaceLocations = (data) => {
-    return data.outputs[0].data.regions.map((face) => {
-      const clarifaiFace = face.region_info.bounding_box;
-      const image = document.getElementById('inputImage');
-      const width = Number(image.width);
-      const height = Number(image.height);
-
-      return {
-        leftCol: clarifaiFace.left_col * width,
-        topRow: clarifaiFace.top_row * height,
-        rightCol: width - clarifaiFace.right_col * width,
-        bottomRow: height - clarifaiFace.bottom_row * height,
-      };
-    });
   };
 
   const displayFaceBoxes = (boxes) => {
@@ -107,7 +92,6 @@ function App() {
     }
   };
   
-
   const onRouteChange = (route) => {
     if (route === 'signout') {
       setState(initialState);
