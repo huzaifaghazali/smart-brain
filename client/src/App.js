@@ -70,40 +70,43 @@ function App() {
     setState((prevState) => ({ ...prevState, input: event.target.value }));
   };
 
-  const onPictureSubmit = () => {
+  const onPictureSubmit = async () => {
     setState((prevState) => ({ ...prevState, imageUrl: state.input }));
-
-    fetch('http://localhost:3001/imageurl', {
-      method: 'post',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        input: state.input,
-      }),
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        if (result) {
-          fetch('http://localhost:3001/image', {
-            method: 'put',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              id: state.user.id,
-            }),
-          })
-            .then((response) => response.json())
-            .then((count) => {
-              setState((prevState) => ({
-                ...prevState,
-                user: { ...prevState.user, entries: count },
-              }));
-            })
-            .catch(console.log);
-        }
-        console.log(result);
-        displayFaceBoxes(calculateFaceLocations(result));
-      })
-      .catch((error) => console.log('error', error));
+  
+    try {
+      const response = await fetch('http://localhost:3001/imageurl', {
+        method: 'post',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          input: state.input,
+        }),
+      });
+  
+      const result = await response.json();
+      if (result) {
+        const countResponse = await fetch('http://localhost:3001/image', {
+          method: 'put',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: state.user.id,
+          }),
+        });
+  
+        const count = await countResponse.json();
+  
+        setState((prevState) => ({
+          ...prevState,
+          user: { ...prevState.user, entries: count },
+        }));
+      }
+  
+      console.log(result);
+      displayFaceBoxes(calculateFaceLocations(result));
+    } catch (error) {
+      console.log('error', error);
+    }
   };
+  
 
   const onRouteChange = (route) => {
     if (route === 'signout') {
