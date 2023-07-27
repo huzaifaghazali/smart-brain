@@ -6,6 +6,7 @@ import Navigation from './Navigation/Navigation';
 import Rank from './Rank/Rank';
 import Register from './Register/Register';
 import Signin from './Signin/Signin';
+import Modal from './Modal/Modal';
 
 export {
   FaceRecognition,
@@ -16,4 +17,5 @@ export {
   Rank,
   Register,
   Signin,
+  Modal
 };

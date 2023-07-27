@@ -14,6 +14,7 @@ import {
   FaceRecognition,
   Signin,
   Register,
+  Modal
 } from './components';
 
 const initialState = {
