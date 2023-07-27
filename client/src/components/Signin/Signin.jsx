@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 
+import './Signin.css';
+
 const Signin = ({ onRouteChange, loadUser }) => {
   const [signInEmail, setSignInEmail] = useState('');
   const [signInPassword, setSignInPassword] = useState('');
@@ -49,7 +51,7 @@ const Signin = ({ onRouteChange, loadUser }) => {
                 Email
               </label>
               <input
-                className='pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100'
+                className='pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100 hover-black'
                 type='email'
                 name='email-address'
                 id='email-address'
@@ -62,7 +64,7 @@ const Signin = ({ onRouteChange, loadUser }) => {
                 Password
               </label>
               <input
-                className='b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100'
+                className='b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100 hover-black'
                 type='password'
                 name='password'
                 id='password'

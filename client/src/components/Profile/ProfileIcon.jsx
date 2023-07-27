@@ -8,7 +8,7 @@ import {
 
 import PIcon from '../../assets/images/profileIcon1.svg';
 
-const ProfileIcon = () => {
+const ProfileIcon = ({ onRouteChange }) => {
   const [dropDownOpen, setDropDownOpen] = useState(false);
 
   const toggle = () => setDropDownOpen((prevState) => !prevState);
@@ -22,7 +22,9 @@ const ProfileIcon = () => {
         <DropdownMenu dark className='o-60 shadow-5'>
           <DropdownItem>View Profile</DropdownItem>
           <DropdownItem divider />
-          <DropdownItem>Signout</DropdownItem>
+          <DropdownItem onClick={() => onRouteChange('signout')}>
+            Signout
+          </DropdownItem>
         </DropdownMenu>
       </Dropdown>
     </div>
