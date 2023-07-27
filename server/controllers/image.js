@@ -1,6 +1,4 @@
 const { postgresDB } = require('../database/postgres');
-
-const { returnClarifaiRequestOptions } = require('../utils');
 const { ClarifaiStub, grpc } = require('clarifai-nodejs-grpc');
 
 const stub = ClarifaiStub.grpc();
@@ -9,6 +7,7 @@ const metadata = new grpc.Metadata();
 metadata.set('authorization', `Key ${process.env.CLARIFAI_API_KEY}`);
 
 // Method 1 Using simple fetch
+// const { returnClarifaiRequestOptions } = require('../utils');
 /*
 const handleApiCall = (req, res) => {
   fetch(
