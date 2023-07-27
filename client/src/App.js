@@ -3,8 +3,6 @@ import { ToastContainer } from 'react-toastify';
 import ParticlesBg from 'particles-bg';
 import {calculateFaceLocations} from './utils/faceLocation';
 
-
-
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
 
@@ -105,8 +103,8 @@ function App() {
 
   return (
     <div className='App'>
-      <div className='particles'>
-        <ParticlesBg color='#ffffff' type='cobweb' bg={true} />
+      <div className='particles o-70'>
+        <ParticlesBg num={130} color='#ffffff' type='cobweb' bg={true} />
       </div>
       <Navigation isSignedIn={state.isSignedIn} onRouteChange={onRouteChange} />
       {state.route === 'home' ? (
