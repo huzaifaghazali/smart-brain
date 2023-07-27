@@ -15,6 +15,7 @@ import {
   Signin,
   Register,
   Modal,
+  Profile,
 } from './components';
 
 const initialState = {
@@ -102,15 +103,33 @@ function App() {
     }
     setState((prevState) => ({ ...prevState, route: route }));
   };
-  const modalRoot = document.getElementById('modal-root');
+
+  const toggleModal = () => {
+    setState((prevState) => ({
+      ...prevState,
+      isProfileOpen: !prevState.isProfileOpen,
+    }));
+  };
 
   return (
     <div className='App'>
       <div className='particles o-70'>
         <ParticlesBg num={130} color='#ffffff' type='cobweb' bg={true} />
       </div>
-      <Navigation isSignedIn={state.isSignedIn} onRouteChange={onRouteChange} />
-      {state.isProfileOpen && <Modal modalRoot={modalRoot}>{'hello'}</Modal>}
+      <Navigation
+        isSignedIn={state.isSignedIn}
+        onRouteChange={onRouteChange}
+        toggleModal={toggleModal}
+      />
+      {state.isProfileOpen && (
+        <Modal>
+          <Profile
+            isProfileOpen={state.isProfileOpen}
+            toggleModal={toggleModal}
+          />
+        </Modal>
+      )}
+
       {state.route === 'home' ? (
         <div>
           <Logo />
