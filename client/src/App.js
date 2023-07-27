@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import ParticlesBg from 'particles-bg';
-import {calculateFaceLocations} from './utils/faceLocation';
+import { calculateFaceLocations } from './utils/faceLocation';
 
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
@@ -14,7 +14,7 @@ import {
   FaceRecognition,
   Signin,
   Register,
-  Modal
+  Modal,
 } from './components';
 
 const initialState = {
@@ -23,6 +23,7 @@ const initialState = {
   boxes: [],
   route: 'signin',
   isSignedIn: false,
+  isProfileOpen: false,
   user: {
     id: '',
     name: '',
@@ -58,7 +59,7 @@ function App() {
 
   const onPictureSubmit = async () => {
     setState((prevState) => ({ ...prevState, imageUrl: state.input }));
-  
+
     try {
       const response = await fetch('http://localhost:3001/imageurl', {
         method: 'post',
@@ -67,7 +68,7 @@ function App() {
           input: state.input,
         }),
       });
-  
+
       const result = await response.json();
       if (result) {
         const countResponse = await fetch('http://localhost:3001/image', {
@@ -77,22 +78,22 @@ function App() {
             id: state.user.id,
           }),
         });
-  
+
         const count = await countResponse.json();
-  
+
         setState((prevState) => ({
           ...prevState,
           user: { ...prevState.user, entries: count },
         }));
       }
-  
+
       console.log(result);
       displayFaceBoxes(calculateFaceLocations(result));
     } catch (error) {
       console.log('error', error);
     }
   };
-  
+
   const onRouteChange = (route) => {
     if (route === 'signout') {
       return setState(initialState);
@@ -101,6 +102,7 @@ function App() {
     }
     setState((prevState) => ({ ...prevState, route: route }));
   };
+  const modalRoot = document.getElementById('modal-root');
 
   return (
     <div className='App'>
@@ -108,6 +110,7 @@ function App() {
         <ParticlesBg num={130} color='#ffffff' type='cobweb' bg={true} />
       </div>
       <Navigation isSignedIn={state.isSignedIn} onRouteChange={onRouteChange} />
+      {state.isProfileOpen && <Modal modalRoot={modalRoot}>{'hello'}</Modal>}
       {state.route === 'home' ? (
         <div>
           <Logo />
