@@ -33,6 +33,9 @@ The Smart Brain project is a full-stack web application designed to detect faces
   Detect Face
     ![home_pic](https://github.com/huzaifaghazali/smart-brain/assets/63412385/d2cb0740-3005-4078-8d4a-b81b67d91b03)
 
+  Detect Multiple Faces
+    ![multiple faces](https://github.com/huzaifaghazali/smart-brain/assets/63412385/adb10717-3c57-460a-b4f6-663a8099dc79)
+
 <a name="Features"/>
 
 ## Features
