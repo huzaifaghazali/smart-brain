@@ -12,6 +12,7 @@ const FaceRecognition = ({ imageUrl, boxes }) => {
           alt=''
           width='500px'
           height='auto'
+          className='mb-5'
         />
         {boxes.map((box, index) => {
           return (
