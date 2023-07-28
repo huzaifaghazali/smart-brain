@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import ParticlesBg from 'particles-bg';
+import { toast } from 'react-toastify';
 import { calculateFaceLocations } from './utils/faceLocation';
 
 import 'react-toastify/dist/ReactToastify.css';
@@ -59,6 +60,12 @@ function App() {
   };
 
   const onPictureSubmit = async () => {
+
+    if(state.input === '') {
+      toast.error('Please enter Image Link');
+      return;
+    }
+
     setState((prevState) => ({ ...prevState, imageUrl: state.input }));
 
     try {
