@@ -32,6 +32,8 @@ const initialState = {
     email: '',
     entries: 0,
     joined: '',
+    pet: '',
+    age: ''
   },
 };
 
@@ -133,6 +135,7 @@ function App() {
           <Profile
             isProfileOpen={state.isProfileOpen}
             toggleModal={toggleModal}
+            user={state.user}
           />
         </Modal>
       )}
