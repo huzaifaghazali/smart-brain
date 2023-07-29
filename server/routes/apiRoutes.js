@@ -7,13 +7,14 @@ const {
   handleImage,
   handleProfile,
   handleApiCall,
+  handleProfileUpdate,
 } = require('../controllers');
 
 router.post('/signin', handleSignin);
 
 router.post('/register', handleRegister);
 
-router.get('/profile/:id', handleProfile);
+router.route('/profile/:id').get(handleProfile).post(handleProfileUpdate);
 
 router.post('/imageurl', handleApiCall);
 

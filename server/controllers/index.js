@@ -1,6 +1,6 @@
 const { handleSignin } = require('./signin');
 const { handleRegister } = require('./register');
-const { handleProfile } = require('./profile');
+const { handleProfile, handleProfileUpdate } = require('./profile');
 const { handleImage, handleApiCall } = require('./image');
 
 module.exports = {
@@ -8,5 +8,6 @@ module.exports = {
   handleRegister,
   handleProfile,
   handleImage,
-  handleApiCall
+  handleApiCall,
+  handleProfileUpdate
 };

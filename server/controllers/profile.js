@@ -14,6 +14,23 @@ const handleProfile = async (req, res) => {
   }
 };
 
+const handleProfileUpdate = async (req, res) => {
+  const { id } = req.params;
+  const { name, age, pet } = req.body.formInput;
+  try {
+    const updateUser = await postgresDB('users').where({ id }).update({ name });
+
+    if (updateUser) {
+      res.json('success');
+    } else {
+      res.status(400).json('Unable to update');
+    }
+  } catch (error) {
+    res.status(400).json('Error updating user');
+  }
+};
+
 module.exports = {
   handleProfile,
+  handleProfileUpdate,
 };
