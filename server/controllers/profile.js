@@ -18,7 +18,9 @@ const handleProfileUpdate = async (req, res) => {
   const { id } = req.params;
   const { name, age, pet } = req.body.formInput;
   try {
-    const updateUser = await postgresDB('users').where({ id }).update({ name });
+    const updateUser = await postgresDB('users')
+      .where({ id })
+      .update({ name, age, pet });
 
     if (updateUser) {
       res.json('success');

@@ -49,6 +49,8 @@ function App() {
         email: data.email,
         entries: data.entries,
         joined: data.joined,
+        pet: data.pet,
+        age: data.age
       },
     }));
   };
