@@ -138,6 +138,7 @@ function App() {
             isProfileOpen={state.isProfileOpen}
             toggleModal={toggleModal}
             user={state.user}
+            loadUser={loadUser}
           />
         </Modal>
       )}

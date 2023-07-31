@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
+
 import './Profile.css';
 
 import Logo from '../../assets/images/profileIcon.svg';
 
-const Profile = ({ isProfileOpen, toggleModal, user }) => {
-  const { name, entries, joined, age, pet } = user;
+const Profile = ({ isProfileOpen, toggleModal, user, loadUser }) => {
+  const { entries, joined } = user;
 
   const [profileData, setProfileData] = useState({
-    username: name,
-    userage: age,
-    userpet: pet,
+    name: user.name,
+    age: user.age,
+    pet: user.pet,
   });
 
   const onFormChange = (event) => {
@@ -19,27 +21,47 @@ const Profile = ({ isProfileOpen, toggleModal, user }) => {
       ...prevState,
       [name]: value,
     }));
-  }
+  };
+
+  const onProfileUpdate = async (data) => {
+    try {
+      console.log('Data to be sent:', data);
+      const response = await fetch(`http://localhost:3001/profile/${user.id}`, {
+        method: 'post',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ formInput: data }),
+      });
+
+      const updatedUser = { ...user, ...data }; // Merge data into the user object
+      toast.success('Profile Updated Successfully!!');
+      toggleModal();
+      loadUser(updatedUser);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const { name, age, pet } = profileData;
 
   return (
     <div className='profile-modal'>
       <article className='br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center bg-dark text-white o-80'>
         <main className='pa4 white-80 w-80'>
           <img src={Logo} className='h3 w3 dib' alt='avatar' />
-          <h1>{profileData.username}</h1>
+          <h1>{name}</h1>
           <h4>{`Images submitted: ${entries}`}</h4>
           <p>{`Member since: date ${new Date(joined).toLocaleDateString()}`}</p>
           <hr />
-          <label className='mt2 fw6' htmlFor='username'>
+          <label className='mt2 fw6' htmlFor='name'>
             Name:
           </label>
           <input
             type='text'
-            name='username'
+            name='name'
             className='pa2 ba w-100 fw6'
             placeholder={name ? name : 'Update your name'}
             id='name'
-            value={profileData.username}
+            value={name}
             onChange={onFormChange}
           />
           <label className='mt2 fw6' htmlFor='user-age'>
@@ -47,11 +69,11 @@ const Profile = ({ isProfileOpen, toggleModal, user }) => {
           </label>
           <input
             type='text'
-            name='userage'
+            name='age'
             className='pa2 ba w-100 fw6'
             placeholder={age ? age : 'Enter your age'}
             id='age'
-            value={profileData.userage}
+            value={age}
             onChange={onFormChange}
           />
           <label className='mt2 fw6' htmlFor='user-age'>
@@ -59,18 +81,21 @@ const Profile = ({ isProfileOpen, toggleModal, user }) => {
           </label>
           <input
             type='text'
-            name='userpet'
+            name='pet'
             className='pa2 ba w-100 fw6'
             placeholder={pet ? pet : 'Enter you pet'}
             id='pet'
-            value={profileData.userpet}
+            value={pet}
             onChange={onFormChange}
           />
           <div
             className='mt4'
             style={{ display: 'flex', justifyContent: 'space-evenly' }}
           >
-            <button className='b pa2 grow pointer hover-white w-40 bg-info b--black-20'>
+            <button
+              onClick={() => onProfileUpdate({ name, age, pet })}
+              className='b pa2 grow pointer hover-white w-40 bg-info b--black-20'
+            >
               Save
             </button>
             <button
