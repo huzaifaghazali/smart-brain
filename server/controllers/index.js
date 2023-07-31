@@ -1,4 +1,4 @@
-const { handleSignin } = require('./signin');
+const { handleSignin, signinAuthentication } = require('./signin');
 const { handleRegister } = require('./register');
 const { handleProfile, handleProfileUpdate } = require('./profile');
 const { handleImage, handleApiCall } = require('./image');
@@ -9,5 +9,6 @@ module.exports = {
   handleProfile,
   handleImage,
   handleApiCall,
-  handleProfileUpdate
+  handleProfileUpdate,
+  signinAuthentication
 };

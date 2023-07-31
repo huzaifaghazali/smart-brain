@@ -6,7 +6,7 @@ const handleSignin = async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.status(400).json('Please fill out all the fields');
+    return Promise.reject('Incorrect form submission');
   }
 
   try {
@@ -16,7 +16,7 @@ const handleSignin = async (req, res) => {
       .where('email', '=', email);
 
     if (data.length === 0) {
-      return res.status(400).json('Wrong Credentials');
+      return Promise.reject('Wrong Credentials');
     }
 
     const result = await bcrypt.compare(password, data[0].hash);
@@ -27,15 +27,38 @@ const handleSignin = async (req, res) => {
         .from('users')
         .where('email', '=', email);
 
-      res.json(user[0]);
+      return user[0];
     } else {
-      res.status(400).json('Wrong Credentials');
+      return Promise.reject('Unable to get user');
     }
   } catch (err) {
-    res.status(400).json('Wrong Credentials');
+    Promise.reject('Wrong Credentials');
+  }
+};
+
+const getAuthTokenId = () => {
+  console.log('auth ok');
+};
+
+const signinAuthentication = async (req, res) => {
+  const { authorization } = req.headers;
+  try {
+    if (authorization) {
+      // If authorization header is present, call getAuthTokenId and handle the result
+      getAuthTokenId();
+    } else {
+      // If no authorization header, handleSignin and handle the result
+      const data = await handleSignin(req, res);
+
+      res.json(data);
+    }
+  } catch (error) {
+    // Handle any errors and send a 400 status with the error message
+    res.status(400).json(error);
   }
 };
 
 module.exports = {
   handleSignin,
+  signinAuthentication,
 };

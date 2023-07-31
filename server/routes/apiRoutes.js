@@ -8,9 +8,10 @@ const {
   handleProfile,
   handleApiCall,
   handleProfileUpdate,
+  signinAuthentication
 } = require('../controllers');
 
-router.post('/signin', handleSignin);
+router.post('/signin', signinAuthentication);
 
 router.post('/register', handleRegister);
 
