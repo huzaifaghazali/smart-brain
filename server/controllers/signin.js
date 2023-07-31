@@ -1,3 +1,5 @@
+const jwt = require('jsonwebtoken');
+
 const bcrypt = require('bcrypt');
 
 const { postgresDB } = require('../database/postgres');
@@ -40,6 +42,19 @@ const getAuthTokenId = () => {
   console.log('auth ok');
 };
 
+const signToken = (email) => {
+  const jwtPayload = { email };
+  return jwt.sign(jwtPayload, 'JWT_SECRET_KEY', { expiresIn: '2 days'});
+};
+
+const createSession = async (user) => {
+  // Create JWT token , return user data
+  const { email, id } = user;
+
+  const token = signToken(email);
+  return { success: 'true', userId: id, token, user }
+};
+
 const signinAuthentication = async (req, res) => {
   const { authorization } = req.headers;
   try {
@@ -50,7 +65,14 @@ const signinAuthentication = async (req, res) => {
       // If no authorization header, handleSignin and handle the result
       const data = await handleSignin(req, res);
 
-      res.json(data);
+      if (data.id && data.email) {
+        // If data has id and email properties, create session and send it in the response
+        const session = await createSession(data);
+        res.json(session);
+      } else {
+        // If data doesn't have id and email properties, reject with data
+        throw data;
+      }
     }
   } catch (error) {
     // Handle any errors and send a 400 status with the error message

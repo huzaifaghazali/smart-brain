@@ -11,7 +11,6 @@ const Signin = ({ onRouteChange, loadUser }) => {
     setSignInEmail(event.target.value);
   }
 
-
   const onPasswordChange = (event) => {
     setSignInPassword(event.target.value);
   }
@@ -26,9 +25,9 @@ const Signin = ({ onRouteChange, loadUser }) => {
           password: signInPassword
         })
       })
-      const user = await response.json();
-      if(user.id) {
-        loadUser(user);
+      const data = await response.json();
+      if(data.userId) {
+        loadUser(data.user);
         toast.success('Login successfully');
         onRouteChange('home');
       } else {
