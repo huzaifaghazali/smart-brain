@@ -53,17 +53,26 @@ const getAuthTokenId = () => {
   console.log('auth ok');
 };
 
+// Create Token
 const signToken = (email) => {
   const jwtPayload = { email };
   return jwt.sign(jwtPayload, 'JWT_SECRET_KEY', { expiresIn: '2 days' });
 };
 
-const createSession = async (user) => {
-  // Create JWT token , return user data
-  const { email, id } = user;
+// Store the token into the redis
+const setToken = (key, value) => Promise.resolve(redisClient.set(key, value));
 
-  const token = signToken(email);
-  return { success: 'true', userId: id, token, user };
+// Create Session
+const createSession = async (user) => {
+  try {
+    // Create JWT token , return user data
+    const { email, id } = user;
+    const token = signToken(email);
+    await setToken(token, id);
+    return { success: 'true', userId: id, token, user };
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const signinAuthentication = async (req, res) => {
