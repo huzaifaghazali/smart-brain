@@ -12,8 +12,16 @@ services:
       POSTGRES_URL: postgres://postgres:test@localhost:5432/smart-brain
       POSTGRES_DB: smart-brain
       POSTGRES_HOST: postgres
+      REDIS_URL: redis://redis:6379
     ports:
       - '5432:5432'
+
+  # Redis
+  redis:
+    container_name: redis
+    image: redis
+    ports:
+      - "6379:6379"
 
   # Backend
   smart-brain-api:

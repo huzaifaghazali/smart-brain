@@ -6,7 +6,7 @@ const { postgresDB } = require('../database/postgres');
 
 // You will want to update your host to the proper address.
 const redisClient = redis.createClient({
-  host: '127.0.0.1',
+  host: process.env.REDIS_URL,
   legacyMode: true,
 });
 
