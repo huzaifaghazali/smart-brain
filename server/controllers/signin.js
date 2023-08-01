@@ -1,8 +1,19 @@
 const jwt = require('jsonwebtoken');
-
 const bcrypt = require('bcrypt');
+const redis = require('redis');
 
 const { postgresDB } = require('../database/postgres');
+
+// You will want to update your host to the proper address.
+const redisClient = redis.createClient({
+  host: '127.0.0.1',
+  legacyMode: true,
+});
+
+async function redisConnect() {
+  return await redisClient.connect();
+}
+redisConnect();
 
 const handleSignin = async (req, res) => {
   const { email, password } = req.body;
@@ -44,7 +55,7 @@ const getAuthTokenId = () => {
 
 const signToken = (email) => {
   const jwtPayload = { email };
-  return jwt.sign(jwtPayload, 'JWT_SECRET_KEY', { expiresIn: '2 days'});
+  return jwt.sign(jwtPayload, 'JWT_SECRET_KEY', { expiresIn: '2 days' });
 };
 
 const createSession = async (user) => {
@@ -52,7 +63,7 @@ const createSession = async (user) => {
   const { email, id } = user;
 
   const token = signToken(email);
-  return { success: 'true', userId: id, token, user }
+  return { success: 'true', userId: id, token, user };
 };
 
 const signinAuthentication = async (req, res) => {
