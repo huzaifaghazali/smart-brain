@@ -49,8 +49,16 @@ const handleSignin = async (req, res) => {
   }
 };
 
-const getAuthTokenId = () => {
-  console.log('auth ok');
+// Get the user ID
+const getAuthTokenId = (req, res) => {
+  const { authorization } = req.headers;
+  // This will return nil or ID of the user
+  return redisClient.get(authorization, (err, reply) => {
+    if (err || !reply) {
+      return res.status(400).json('Unauthorized');
+    }
+    return res.json({ id: reply });
+  });
 };
 
 // Create Token
@@ -80,7 +88,7 @@ const signinAuthentication = async (req, res) => {
   try {
     if (authorization) {
       // If authorization header is present, call getAuthTokenId and handle the result
-      getAuthTokenId();
+      getAuthTokenId(req, res);
     } else {
       // If no authorization header, handleSignin and handle the result
       const data = await handleSignin(req, res);
