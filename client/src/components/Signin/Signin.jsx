@@ -15,6 +15,10 @@ const Signin = ({ onRouteChange, loadUser }) => {
     setSignInPassword(event.target.value);
   }
 
+  const saveAuthTokenInSession = (token) => {
+    window.sessionStorage.setItem('token', token);
+  }
+
   const onSubmitSignIn = async () => {
     try {
       const response = await fetch('http://localhost:3001/signin', {
@@ -25,8 +29,10 @@ const Signin = ({ onRouteChange, loadUser }) => {
           password: signInPassword
         })
       })
+
       const data = await response.json();
-      if(data.userId) {
+      if(data.userId && data.success === 'true') {
+        saveAuthTokenInSession(data.token);
         loadUser(data.user);
         toast.success('Login successfully');
         onRouteChange('home');

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import ParticlesBg from 'particles-bg';
 import { toast } from 'react-toastify';
@@ -33,7 +33,7 @@ const initialState = {
     entries: 0,
     joined: '',
     pet: '',
-    age: ''
+    age: '',
   },
 };
 
@@ -50,7 +50,7 @@ function App() {
         entries: data.entries,
         joined: data.joined,
         pet: data.pet,
-        age: data.age
+        age: data.age,
       },
     }));
   };
@@ -64,8 +64,7 @@ function App() {
   };
 
   const onPictureSubmit = async () => {
-
-    if(state.input === '') {
+    if (state.input === '') {
       toast.error('Please enter Image Link');
       return;
     }
@@ -121,6 +120,36 @@ function App() {
       isProfileOpen: !prevState.isProfileOpen,
     }));
   };
+
+  useEffect(() => {
+    async function fetchData() {
+      // Get the token from session
+      const token = window.sessionStorage.getItem('token');
+
+      if (token) {
+        try {
+          const signinResponse = await fetch('http://localhost:3001/signin', {
+            method: 'post',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: token,
+            },
+          });
+
+          const signinData = await signinResponse.json();
+          
+          if (signinData && signinData.id) {
+            console.log('Success we need to get user profile');
+          }
+
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
+
+    fetchData();
+  }, []);
 
   return (
     <div className='App'>
