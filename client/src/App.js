@@ -137,11 +137,24 @@ function App() {
           });
 
           const signinData = await signinResponse.json();
-          
-          if (signinData && signinData.id) {
-            console.log('Success we need to get user profile');
-          }
 
+          if (signinData && signinData.id) {
+            const profileResponse = await fetch(
+              `http://localhost:3001/profile/${signinData.id}`,
+              {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: token,
+                },
+              }
+            );
+            const user = await profileResponse.json();
+            if (user && user.email) {
+              loadUser(user);
+              onRouteChange('home');
+            }
+          }
         } catch (error) {
           console.log(error);
         }
