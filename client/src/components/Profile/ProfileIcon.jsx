@@ -13,6 +13,13 @@ const ProfileIcon = ({ onRouteChange, toggleModal }) => {
 
   const toggle = () => setDropDownOpen((prevState) => !prevState);
 
+  // Define the logout function to remove the session token and perform logout actions
+  const logout = () => {
+    // Remove the session token from sessionStorage
+    window.sessionStorage.removeItem('token');
+    onRouteChange('signout');
+  };
+
   return (
     <div className='pa4 tc'>
       <Dropdown isOpen={dropDownOpen} toggle={toggle}>
@@ -22,7 +29,7 @@ const ProfileIcon = ({ onRouteChange, toggleModal }) => {
         <DropdownMenu dark className='o-60 shadow-5'>
           <DropdownItem onClick={toggleModal}>View Profile</DropdownItem>
           <DropdownItem divider />
-          <DropdownItem onClick={() => onRouteChange('signout')}>
+          <DropdownItem  onClick={logout}>
             Signout
           </DropdownItem>
         </DropdownMenu>
