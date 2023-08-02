@@ -109,6 +109,6 @@ const signinAuthentication = async (req, res) => {
 };
 
 module.exports = {
-  handleSignin,
   signinAuthentication,
+  redisClient
 };

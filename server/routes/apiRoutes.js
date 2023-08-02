@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
+const { authenticateUser } = require('../middleware/authorization');
+
 const {
   handleSignin,
   handleRegister,
@@ -8,17 +10,20 @@ const {
   handleProfile,
   handleApiCall,
   handleProfileUpdate,
-  signinAuthentication
+  signinAuthentication,
 } = require('../controllers');
 
 router.post('/signin', signinAuthentication);
 
 router.post('/register', handleRegister);
 
-router.route('/profile/:id').get(handleProfile).post(handleProfileUpdate);
+router
+  .route('/profile/:id')
+  .get(authenticateUser, handleProfile)
+  .post(authenticateUser, handleProfileUpdate);
 
-router.post('/imageurl', handleApiCall);
+router.post('/imageurl', authenticateUser, handleApiCall);
 
-router.put('/image', handleImage);
+router.put('/image', authenticateUser, handleImage);
 
 module.exports = router;

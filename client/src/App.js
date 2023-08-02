@@ -56,7 +56,9 @@ function App() {
   };
 
   const displayFaceBoxes = (boxes) => {
-    setState((prevState) => ({ ...prevState, boxes: boxes }));
+    if(boxes) {
+      setState((prevState) => ({ ...prevState, boxes: boxes }));
+    }
   };
 
   const onInputChange = (event) => {
@@ -74,17 +76,24 @@ function App() {
     try {
       const response = await fetch('http://localhost:3001/imageurl', {
         method: 'post',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': window.sessionStorage.getItem('token'),
+        },
         body: JSON.stringify({
           input: state.input,
         }),
       });
 
       const result = await response.json();
+
       if (result) {
         const countResponse = await fetch('http://localhost:3001/image', {
           method: 'put',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': window.sessionStorage.getItem('token'),
+          },
           body: JSON.stringify({
             id: state.user.id,
           }),
@@ -101,6 +110,7 @@ function App() {
       console.log(result);
       displayFaceBoxes(calculateFaceLocations(result));
     } catch (error) {
+      toast.error('Unauthorized')
       console.log('error', error);
     }
   };
