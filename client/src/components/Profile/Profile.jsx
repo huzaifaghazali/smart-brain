@@ -28,14 +28,19 @@ const Profile = ({ isProfileOpen, toggleModal, user, loadUser }) => {
       console.log('Data to be sent:', data);
       const response = await fetch(`http://localhost:3001/profile/${user.id}`, {
         method: 'post',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': window.sessionStorage.getItem('token'),
+        },
         body: JSON.stringify({ formInput: data }),
       });
 
-      const updatedUser = { ...user, ...data }; // Merge data into the user object
-      toast.success('Profile Updated Successfully!!');
-      toggleModal();
-      loadUser(updatedUser);
+      if (response.status === 200 || response.status === 304) {
+        const updatedUser = { ...user, ...data }; // Merge data into the user object
+        toast.success('Profile Updated Successfully!!');
+        toggleModal();
+        loadUser(updatedUser);
+      }
     } catch (error) {
       console.log(error);
     }
