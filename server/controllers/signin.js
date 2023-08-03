@@ -46,7 +46,6 @@ const signinAuthentication = async (req, res) => {
     } else {
       // If no authorization header, handleSignin and handle the result
       const data = await handleSignin(req, res);
-
       if (data.id && data.email) {
         // If data has id and email properties, create session and send it in the response
         const session = await createSession(data);

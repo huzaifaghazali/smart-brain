@@ -31,6 +31,7 @@ const Signin = ({ onRouteChange, loadUser }) => {
       })
 
       const data = await response.json();
+      console.log(data);
       if(data.userId && data.success === 'true') {
         saveAuthTokenInSession(data.token);
         loadUser(data.user);

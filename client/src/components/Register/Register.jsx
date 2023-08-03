@@ -16,6 +16,10 @@ const Register = ({ onRouteChange, loadUser }) => {
     setRegisterForm({ ...registerForm, [name]: value });
   };
 
+  const saveAuthTokenInSession = (token) => {
+    window.sessionStorage.setItem('token', token);
+  }
+
   const onSubmitSignUp = async () => {
     const { name, email, password } = registerForm;
     if (name === '' || email === '' || password === '') {
@@ -32,9 +36,11 @@ const Register = ({ onRouteChange, loadUser }) => {
           password: registerForm.password,
         }),
       });
-      const user = await response.json();
-      if (user) {
-        loadUser(user);
+      const data = await response.json();
+      console.log(data);
+      if (data.userId && data.success === 'true') {
+        saveAuthTokenInSession(data.token);
+        loadUser(data.user);
         toast.success('Register successfully');
         onRouteChange('home');
       } else {

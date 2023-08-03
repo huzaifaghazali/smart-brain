@@ -2,6 +2,8 @@ const bcrypt = require('bcrypt');
 
 const { postgresDB } = require('../database/postgres');
 
+const { createSession } = require('../utils')
+
 const handleRegister = async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -32,7 +34,9 @@ const handleRegister = async (req, res) => {
       joined: new Date(),
     });
 
-    res.json(user[0]);
+    // res.json(user[0]);
+    const session = await createSession(user[0]);
+    res.json(session);
   } catch (err) {
     res.status(400).json('Unable to register');
   }
