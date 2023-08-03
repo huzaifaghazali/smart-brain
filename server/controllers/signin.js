@@ -7,7 +7,7 @@ const handleSignin = async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return Promise.reject('Incorrect form submission');
+    throw new Error('Incorrect form submission');
   }
 
   try {
@@ -17,7 +17,7 @@ const handleSignin = async (req, res) => {
       .where('email', '=', email);
 
     if (data.length === 0) {
-      return Promise.reject('Wrong Credentials');
+      throw new Error('Wrong Credentials');
     }
 
     const result = await bcrypt.compare(password, data[0].hash);
@@ -30,10 +30,10 @@ const handleSignin = async (req, res) => {
 
       return user[0];
     } else {
-      return Promise.reject('Unable to get user');
+      throw new Error('Unable to get user');
     }
   } catch (err) {
-    Promise.reject('Wrong Credentials');
+    throw new Error('Wrong Credentials');
   }
 };
 
@@ -64,5 +64,4 @@ const signinAuthentication = async (req, res) => {
 
 module.exports = {
   signinAuthentication,
-  // redisClient
 };
