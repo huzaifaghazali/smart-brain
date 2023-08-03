@@ -30,7 +30,7 @@ const Profile = ({ isProfileOpen, toggleModal, user, loadUser }) => {
         method: 'post',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': window.sessionStorage.getItem('token'),
+          Authorization: window.sessionStorage.getItem('token'),
         },
         body: JSON.stringify({ formInput: data }),
       });
@@ -66,7 +66,7 @@ const Profile = ({ isProfileOpen, toggleModal, user, loadUser }) => {
             className='pa2 ba w-100 fw6'
             placeholder={name ? name : 'Update your name'}
             id='name'
-            value={name}
+            value={name || ''}
             onChange={onFormChange}
           />
           <label className='mt2 fw6' htmlFor='user-age'>
@@ -78,7 +78,7 @@ const Profile = ({ isProfileOpen, toggleModal, user, loadUser }) => {
             className='pa2 ba w-100 fw6'
             placeholder={age ? age : 'Enter your age'}
             id='age'
-            value={age}
+            value={age || ''}
             onChange={onFormChange}
           />
           <label className='mt2 fw6' htmlFor='user-age'>
@@ -90,7 +90,7 @@ const Profile = ({ isProfileOpen, toggleModal, user, loadUser }) => {
             className='pa2 ba w-100 fw6'
             placeholder={pet ? pet : 'Enter you pet'}
             id='pet'
-            value={pet}
+            value={pet || ''}
             onChange={onFormChange}
           />
           <div
