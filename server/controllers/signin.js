@@ -49,7 +49,7 @@ const handleSignin = async (req, res) => {
   }
 };
 
-// Get the user ID
+// Used to retrieve the user ID from the Redis store based on the provided authorization token.
 const getAuthTokenId = (req, res) => {
   const { authorization } = req.headers;
   // This will return nil or ID of the user
@@ -61,20 +61,20 @@ const getAuthTokenId = (req, res) => {
   });
 };
 
-// Create Token
+// generates a JSON Web Token (JWT) containing the user's email.
 const signToken = (email) => {
   const jwtPayload = { email };
   return jwt.sign(jwtPayload, 'JWT_SECRET_KEY', { expiresIn: '2 days' });
 };
 
-// Store the token into the redis
+// Stores a key-value pair in the Redis store.
 const setToken = (key, value) => Promise.resolve(redisClient.set(key, value));
 
-// Create Session
+// Create session for the user after successful authentication
 const createSession = async (user) => {
   try {
-    // Create JWT token , return user data
     const { email, id } = user;
+    // Create JWT token , return user data
     const token = signToken(email);
     await setToken(token, id);
     return { success: 'true', userId: id, token, user };
