@@ -1,5 +1,9 @@
 const { returnClarifaiRequestOptions } = require('./ClarifaiRequestOptions');
+const { createSession, redisClient, getAuthTokenId } = require('./authHelpers');
 
 module.exports = {
-   returnClarifaiRequestOptions
-}
+  returnClarifaiRequestOptions,
+  createSession,
+  redisClient,
+  getAuthTokenId,
+};
