@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-
 import { toast } from 'react-toastify';
+
+import { handleRegister } from '../../services/apiRequests';
 
 import './Register.css';
 
@@ -22,22 +23,21 @@ const Register = ({ onRouteChange, loadUser }) => {
 
   const onSubmitSignUp = async () => {
     const { name, email, password } = registerForm;
+
+    // Display toast error if the fields are empty
     if (name === '' || email === '' || password === '') {
       toast.error('Please enter all values');
       return;
     }
+
     try {
-      const response = await fetch('http://localhost:3001/register', {
-        method: 'post',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: registerForm.name,
-          email: registerForm.email,
-          password: registerForm.password,
-        }),
-      });
-      const data = await response.json();
-      console.log(data);
+      // API Call When user login
+      const data = await handleRegister(
+        registerForm.name,
+        registerForm.email,
+        registerForm.password
+      );
+
       if (data.userId && data.success === 'true') {
         saveAuthTokenInSession(data.token);
         loadUser(data.user);
