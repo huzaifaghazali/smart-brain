@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 
-import { handleRegister } from '../../services/apiRequests';
+import { handleRegister } from '../../services/apiAuthRequests';
 
 import './Register.css';
 

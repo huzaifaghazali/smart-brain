@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 
-import { handleLogin } from '../../services/apiRequests';
+import { handleLogin } from '../../services/apiAuthRequests';
 
 import './Signin.css';
 
