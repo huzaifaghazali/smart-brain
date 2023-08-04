@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 
-import './Profile.css';
-
 import Logo from '../../assets/images/profileIcon.svg';
+import { handleProfileUpdate } from '../../services/apiProfileRequest';
+import './Profile.css';
 
 const Profile = ({ isProfileOpen, toggleModal, user, loadUser }) => {
   const { entries, joined } = user;
@@ -25,15 +25,9 @@ const Profile = ({ isProfileOpen, toggleModal, user, loadUser }) => {
 
   const onProfileUpdate = async (data) => {
     try {
-      console.log('Data to be sent:', data);
-      const response = await fetch(`http://localhost:3001/profile/${user.id}`, {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: window.sessionStorage.getItem('token'),
-        },
-        body: JSON.stringify({ formInput: data }),
-      });
+
+      // API Call when user Updates its Profile
+      const response = await handleProfileUpdate(user.id, data)
 
       if (response.status === 200 || response.status === 304) {
         const updatedUser = { ...user, ...data }; // Merge data into the user object
