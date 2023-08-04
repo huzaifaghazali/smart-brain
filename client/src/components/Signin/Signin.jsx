@@ -22,6 +22,13 @@ const Signin = ({ onRouteChange, loadUser }) => {
   };
 
   const onSubmitSignIn = async () => {
+
+    // Display Error toast when fields are empty
+    if (signInEmail === '' || signInPassword === '') {
+      toast.error('Please Fill all Fields');
+      return;
+    }
+
     try {
       // API Call When user login
       const data = await handleLogin(signInEmail, signInPassword);

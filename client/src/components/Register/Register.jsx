@@ -18,7 +18,7 @@ const Register = ({ onRouteChange, loadUser }) => {
 
   const saveAuthTokenInSession = (token) => {
     window.sessionStorage.setItem('token', token);
-  }
+  };
 
   const onSubmitSignUp = async () => {
     const { name, email, password } = registerForm;
