@@ -11,34 +11,34 @@ const Signin = ({ onRouteChange, loadUser }) => {
 
   const onEmailChange = (event) => {
     setSignInEmail(event.target.value);
-  }
+  };
 
   const onPasswordChange = (event) => {
     setSignInPassword(event.target.value);
-  }
+  };
 
   const saveAuthTokenInSession = (token) => {
     window.sessionStorage.setItem('token', token);
-  }
+  };
 
   const onSubmitSignIn = async () => {
     try {
       // API Call When user login
       const data = await handleLogin(signInEmail, signInPassword);
-      
-      if(data.userId && data.success === 'true') {
+
+      if (data.userId && data.success === 'true') {
+        // Save the token in the session storage
         saveAuthTokenInSession(data.token);
         loadUser(data.user);
         toast.success('Login successfully');
         onRouteChange('home');
       } else {
-        toast.error('Error Logging in')
+        toast.error('Error Logging in');
       }
     } catch (error) {
-      console.log('Login error',error);
+      console.log('Login error', error);
     }
-    
-  }
+  };
 
   return (
     <article className='br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center'>
@@ -68,7 +68,7 @@ const Signin = ({ onRouteChange, loadUser }) => {
                 type='password'
                 name='password'
                 id='password'
-                onChange= {onPasswordChange}
+                onChange={onPasswordChange}
               />
             </div>
           </fieldset>
