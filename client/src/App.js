@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import ParticlesBg from 'particles-bg';
 import { toast } from 'react-toastify';
+
 import { calculateFaceLocations } from './utils/faceLocation';
+import { handleImageUrl, handleImage } from './services/apiImageRequest';
 
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
@@ -56,7 +58,7 @@ function App() {
   };
 
   const displayFaceBoxes = (boxes) => {
-    if(boxes) {
+    if (boxes) {
       setState((prevState) => ({ ...prevState, boxes: boxes }));
     }
   };
@@ -74,32 +76,12 @@ function App() {
     setState((prevState) => ({ ...prevState, imageUrl: state.input }));
 
     try {
-      const response = await fetch('http://localhost:3001/imageurl', {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': window.sessionStorage.getItem('token'),
-        },
-        body: JSON.stringify({
-          input: state.input,
-        }),
-      });
-
-      const result = await response.json();
+      // API call when user input the image url ( Clarifai model)
+      const result = await handleImageUrl(state.input);
 
       if (result) {
-        const countResponse = await fetch('http://localhost:3001/image', {
-          method: 'put',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': window.sessionStorage.getItem('token'),
-          },
-          body: JSON.stringify({
-            id: state.user.id,
-          }),
-        });
-
-        const count = await countResponse.json();
+        // API call to increase the entries (i.e num of images)
+        const count = await handleImage(state.user.id);
 
         setState((prevState) => ({
           ...prevState,
@@ -107,10 +89,8 @@ function App() {
         }));
       }
 
-      console.log(result);
       displayFaceBoxes(calculateFaceLocations(result));
     } catch (error) {
-      toast.error('Unauthorized')
       console.log('error', error);
     }
   };
