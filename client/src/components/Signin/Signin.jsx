@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 
+import { handleLogin } from '../../services/apiRequests';
+
 import './Signin.css';
 
 const Signin = ({ onRouteChange, loadUser }) => {
@@ -21,17 +23,9 @@ const Signin = ({ onRouteChange, loadUser }) => {
 
   const onSubmitSignIn = async () => {
     try {
-      const response = await fetch('http://localhost:3001/signin', {
-        method: 'post',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          email: signInEmail,
-          password: signInPassword
-        })
-      })
-
-      const data = await response.json();
-      console.log(data);
+      // API Call When user login
+      const data = await handleLogin(signInEmail, signInPassword);
+      
       if(data.userId && data.success === 'true') {
         saveAuthTokenInSession(data.token);
         loadUser(data.user);
